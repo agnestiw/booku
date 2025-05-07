@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daftar - Booku</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      /* Reset dan Dasar */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+          sans-serif;
+      }
+
+      /* Warna */
+      :root {
+        --primary: #10b981;
+        --primary-dark: #059669;
+        --secondary: #f5f3ef;
+        --text: #333;
+        --text-light: #666;
+        --border: #eee;
+        --error: #ef4444;
+      }
+
+      body {
+        background-color: var(--secondary);
+        color: var(--text);
+        line-height: 1.6;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      ul {
+        list-style: none;
+      }
+
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      /* Tombol */
+      .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: background-color 0.3s;
+        text-align: center;
+      }
+
+      .btn:hover {
+        background-color: var(--primary-dark);
+      }
+
+      .btn-outline {
+        background-color: transparent;
+        border: 1px solid var(--primary);
+        color: var(--primary);
+      }
+
+      .btn-outline:hover {
+        background-color: #f0fdf9;
+      }
+
+      .btn-block {
+        display: block;
+        width: 100%;
+      }
+
+      /* Header dan Navigasi */
+      header {
+        background-color: white;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 70px;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        font-size: 1.5rem;
+      }
+
+      .logo-icon {
+        width: 32px;
+        height: 32px;
+        background-color: var(--primary);
+        color: white;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 8px;
+        font-weight: bold;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+      }
+
+      .nav-links a {
+        font-weight: 500;
+        position: relative;
+      }
+
+      .nav-links a:hover {
+        color: var(--primary);
+      }
+
+      .nav-links a.active {
+        color: var(--primary);
+      }
+
+      .dropdown {
+        position: relative;
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: white;
+        min-width: 160px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+        border-radius: 4px;
+        padding: 8px 0;
+      }
+
+      .dropdown-content a {
+        padding: 8px 16px;
+        display: block;
+      }
+
+      .dropdown-content a:hover {
+        background-color: var(--secondary);
+      }
+
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+
+      .nav-icons {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .icon-btn {
+        position: relative;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.2rem;
+      }
+
+      .cart-count {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background-color: var(--primary);
+        color: white;
+        font-size: 0.7rem;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .mobile-menu-btn {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+
+      /* Register Form */
+      .auth-container {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 0;
+      }
+
+      .auth-card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 500px;
+        padding: 30px;
+      }
+
+      .auth-header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .auth-header h1 {
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+      }
+
+      .auth-header p {
+        color: var(--text-light);
+      }
+
+      .form-row {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+        flex: 1;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+      }
+
+      .form-control:focus {
+        outline: none;
+        border-color: var(--primary);
+      }
+
+      .form-error {
+        color: var(--error);
+        font-size: 0.85rem;
+        margin-top: 5px;
+      }
+
+      .form-terms {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 20px;
+      }
+
+      .form-terms input {
+        margin-right: 10px;
+        margin-top: 5px;
+      }
+
+      .form-terms label {
+        font-size: 0.9rem;
+        color: var(--text-light);
+      }
+
+      .form-terms a {
+        color: var(--primary);
+      }
+
+      .form-terms a:hover {
+        text-decoration: underline;
+      }
+
+      .auth-divider {
+        display: flex;
+        align-items: center;
+        margin: 25px 0;
+      }
+
+      .auth-divider::before,
+      .auth-divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background-color: #ddd;
+      }
+
+      .auth-divider span {
+        padding: 0 15px;
+        color: var(--text-light);
+        font-size: 0.9rem;
+      }
+
+      .social-login {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 25px;
+      }
+
+      .social-btn {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: white;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .social-btn:hover {
+        background-color: var(--secondary);
+      }
+
+      .social-btn i {
+        margin-right: 8px;
+      }
+
+      .auth-footer {
+        text-align: center;
+        margin-top: 25px;
+        color: var(--text-light);
+      }
+
+      .auth-footer a {
+        color: var(--primary);
+        font-weight: 500;
+      }
+
+      .auth-footer a:hover {
+        text-decoration: underline;
+      }
+
+      /* Footer */
+      footer {
+        background-color: white;
+        border-top: 1px solid var(--border);
+        padding: 30px 0;
+        margin-top: auto;
+      }
+
+      .footer-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+
+      .copyright {
+        color: var(--text-light);
+        font-size: 0.9rem;
+      }
+
+      .footer-legal {
+        display: flex;
+        gap: 20px;
+      }
+
+      .footer-legal a {
+        color: var(--text-light);
+        font-size: 0.9rem;
+        transition: color 0.3s;
+      }
+
+      .footer-legal a:hover {
+        color: var(--primary);
+      }
+
+      /* Mobile Menu */
+      .mobile-menu {
+        display: none;
+        background-color: white;
+        padding: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .mobile-menu a {
+        display: block;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .mobile-menu a:last-child {
+        border-bottom: none;
+      }
+
+      .mobile-dropdown {
+        padding-left: 20px;
+        display: none;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .nav-links,
+        .nav-icons {
+          display: none;
+        }
+
+        .mobile-menu-btn {
+          display: block;
+        }
+
+        .mobile-menu.active {
+          display: block;
+        }
+
+        .auth-card {
+          padding: 20px;
+        }
+
+        .form-row {
+          flex-direction: column;
+          gap: 0;
+        }
+
+        .social-login {
+          flex-direction: column;
+        }
+
+        .footer-bottom {
+          flex-direction: column;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <div class="container">
+        <div class="navbar">
+          <a href="index.html" class="logo">
+            <div class="logo-icon">B</div>
+            Booku
+          </a>
+          <nav class="nav-links">
+            <a href="index.html">Beranda</a>
+            <div class="dropdown">
+              <a href="#">Halaman</a>
+              <div class="dropdown-content">
+                <a href="about.html">Tentang Kami</a>
+                <a href="contact.html">Kontak</a>
+              </div>
+            </div>
+            <a href="shop.html">Toko</a>
+            <a href="artikel.html">Artikel</a>
+          </nav>
+          <div class="nav-icons">
+            <button class="icon-btn">
+              <i class="fas fa-user"></i>
+            </button>
+            <button class="icon-btn">
+              <i class="fas fa-shopping-cart"></i>
+              <span class="cart-count">0</span>
+            </button>
+          </div>
+          <button class="mobile-menu-btn">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+      </div>
+      <div class="mobile-menu">
+        <a href="index.html">Beranda</a>
+        <a href="#" class="mobile-dropdown-toggle">Halaman</a>
+        <div class="mobile-dropdown">
+          <a href="about.html">Tentang Kami</a>
+          <a href="contact.html">Kontak</a>
+        </div>
+        <a href="shop.html">Toko</a>
+        <a href="artikel.html">Artikel</a>
+        <a href="login.html"><i class="fas fa-user"></i> Masuk</a>
+        <a href="#"><i class="fas fa-shopping-cart"></i> Keranjang (0)</a>
+      </div>
+    </header>
+
+    <!-- Register Form -->
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-header">
+          <h1>Buat Akun Baru</h1>
+          <p>Daftar untuk mendapatkan akses ke semua fitur Booku</p>
+        </div>
+        <form action="#" method="post">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="first-name">Nama Depan</label>
+              <input
+                type="text"
+                id="first-name"
+                class="form-control"
+                placeholder="Nama depan"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="last-name">Nama Belakang</label>
+              <input
+                type="text"
+                id="last-name"
+                class="form-control"
+                placeholder="Nama belakang"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              class="form-control"
+              placeholder="Masukkan email Anda"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="phone">Nomor Telepon</label>
+            <input
+              type="tel"
+              id="phone"
+              class="form-control"
+              placeholder="Masukkan nomor telepon Anda"
+            />
+          </div>
+          <div class="form-group">
+            <label for="password">Kata Sandi</label>
+            <input
+              type="password"
+              id="password"
+              class="form-control"
+              placeholder="Buat kata sandi"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="confirm-password">Konfirmasi Kata Sandi</label>
+            <input
+              type="password"
+              id="confirm-password"
+              class="form-control"
+              placeholder="Konfirmasi kata sandi Anda"
+              required
+            />
+          </div>
+          <div class="form-terms">
+            <input type="checkbox" id="terms" required />
+            <label for="terms">
+              Saya menyetujui <a href="#">Syarat & Ketentuan</a> dan
+              <a href="#">Kebijakan Privasi</a> Booku
+            </label>
+          </div>
+          <button type="submit" class="btn btn-block">Daftar</button>
+        </form>
+        <div class="auth-divider">
+          <span>Atau daftar dengan</span>
+        </div>
+        <div class="social-login">
+          <button class="social-btn">
+            <i class="fab fa-google"></i> Google
+          </button>
+          <button class="social-btn">
+            <i class="fab fa-facebook-f"></i> Facebook
+          </button>
+        </div>
+        <div class="auth-footer">
+          Sudah memiliki akun? <a href="login.html">Masuk sekarang</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-bottom">
+          <p class="copyright">
+            &copy; 2023 Booku Digital Library. Hak Cipta Dilindungi.
+          </p>
+          <div class="footer-legal">
+            <a href="#">Syarat & Ketentuan</a>
+            <a href="#">Kebijakan Privasi</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Mobile Menu Toggle
+      document.addEventListener("DOMContentLoaded", function () {
+        const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
+        const mobileMenu = document.querySelector(".mobile-menu");
+        const mobileDropdownToggle = document.querySelector(
+          ".mobile-dropdown-toggle"
+        );
+        const mobileDropdown = document.querySelector(".mobile-dropdown");
+
+        mobileMenuBtn.addEventListener("click", function () {
+          mobileMenu.classList.toggle("active");
+          const icon = mobileMenuBtn.querySelector("i");
+          if (icon.classList.contains("fa-bars")) {
+            icon.classList.remove("fa-bars");
+            icon.classList.add("fa-times");
+          } else {
+            icon.classList.remove("fa-times");
+            icon.classList.add("fa-bars");
+          }
+        });
+
+        mobileDropdownToggle.addEventListener("click", function (e) {
+          e.preventDefault();
+          mobileDropdown.style.display =
+            mobileDropdown.style.display === "block" ? "none" : "block";
+        });
+      });
+    </script>
+  </body>
+</html>

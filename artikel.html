@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Artikel - Booku</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      /* Reset dan Dasar */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+          sans-serif;
+      }
+
+      body {
+        background-color: #fff;
+        color: #333;
+        line-height: 1.6;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      ul {
+        list-style: none;
+      }
+
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      /* Warna */
+      :root {
+        --primary: #10b981;
+        --primary-dark: #059669;
+        --secondary: #f5f3ef;
+        --text: #333;
+        --text-light: #666;
+        --border: #eee;
+      }
+
+      /* Tombol */
+      .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: background-color 0.3s;
+      }
+
+      .btn:hover {
+        background-color: var(--primary-dark);
+      }
+
+      .btn-outline {
+        background-color: transparent;
+        border: 1px solid var(--primary);
+        color: var(--primary);
+      }
+
+      .btn-outline:hover {
+        background-color: #f0fdf9;
+      }
+
+      /* Header dan Navigasi */
+      header {
+        background-color: white;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 70px;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        font-size: 1.5rem;
+      }
+
+      .logo-icon {
+        width: 32px;
+        height: 32px;
+        background-color: var(--primary);
+        color: white;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 8px;
+        font-weight: bold;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+      }
+
+      .nav-links a {
+        font-weight: 500;
+        position: relative;
+      }
+
+      .nav-links a:hover {
+        color: var(--primary);
+      }
+
+      .nav-links a.active {
+        color: var(--primary);
+      }
+
+      .dropdown {
+        position: relative;
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: white;
+        min-width: 160px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+        border-radius: 4px;
+        padding: 8px 0;
+      }
+
+      .dropdown-content a {
+        padding: 8px 16px;
+        display: block;
+      }
+
+      .dropdown-content a:hover {
+        background-color: var(--secondary);
+      }
+
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+
+      .nav-icons {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .icon-btn {
+        position: relative;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.2rem;
+      }
+
+      .cart-count {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background-color: var(--primary);
+        color: white;
+        font-size: 0.7rem;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .mobile-menu-btn {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+
+      /* Artikel Page Styles */
+      .artikel-header {
+        padding: 40px 0 20px;
+        background-color: var(--secondary);
+      }
+
+      .artikel-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+      }
+
+      .artikel-layout {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        margin: 40px 0;
+      }
+
+      .artikel-main {
+        flex: 3;
+        min-width: 300px;
+      }
+
+      .artikel-sidebar {
+        flex: 1;
+        min-width: 250px;
+        max-width: 300px;
+      }
+
+      .artikel-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 30px;
+      }
+
+      .artikel-card {
+        background-color: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        border: 1px solid var(--border);
+        transition: transform 0.3s;
+      }
+
+      .artikel-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .artikel-card-image {
+        position: relative;
+        height: 200px;
+        overflow: hidden;
+      }
+
+      .artikel-card-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s;
+      }
+
+      .artikel-card:hover .artikel-card-image img {
+        transform: scale(1.05);
+      }
+
+      .artikel-card-content {
+        padding: 20px;
+      }
+
+      .artikel-meta {
+        display: flex;
+        font-size: 0.85rem;
+        color: var(--text-light);
+        margin-bottom: 10px;
+      }
+
+      .artikel-meta span {
+        margin-right: 10px;
+      }
+
+      .artikel-meta span:not(:last-child)::after {
+        content: "•";
+        margin-left: 10px;
+      }
+
+      .artikel-card-title {
+        font-weight: bold;
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+        transition: color 0.3s;
+      }
+
+      .artikel-card:hover .artikel-card-title {
+        color: var(--primary);
+      }
+
+      .artikel-excerpt {
+        color: var(--text-light);
+        margin-bottom: 15px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .artikel-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid var(--border);
+        padding-top: 15px;
+        margin-top: 15px;
+      }
+
+      .artikel-author {
+        font-size: 0.9rem;
+        color: var(--text-light);
+      }
+
+      .read-more {
+        color: var(--primary);
+        font-weight: 500;
+        font-size: 0.9rem;
+      }
+
+      .read-more:hover {
+        text-decoration: underline;
+      }
+
+      .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 40px;
+      }
+
+      .pagination-item {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #ddd;
+        margin: 0 5px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .pagination-item:hover,
+      .pagination-item.active {
+        background-color: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+
+      /* Sidebar Styles */
+      .sidebar-card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        border: 1px solid var(--border);
+        padding: 20px;
+        margin-bottom: 30px;
+      }
+
+      .sidebar-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .search-box {
+        display: flex;
+        margin-bottom: 10px;
+      }
+
+      .search-input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-right: none;
+        border-radius: 4px 0 0 4px;
+        outline: none;
+      }
+
+      .search-btn {
+        padding: 10px 15px;
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 0 4px 4px 0;
+        cursor: pointer;
+      }
+
+      .category-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .category-list a {
+        color: var(--text-light);
+        transition: color 0.3s;
+      }
+
+      .category-list a:hover {
+        color: var(--primary);
+      }
+
+      .subscribe-form input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        outline: none;
+      }
+
+      /* Footer */
+      footer {
+        background-color: white;
+        border-top: 1px solid var(--border);
+        padding: 60px 0 30px;
+        margin-top: 60px;
+      }
+
+      .footer-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 40px;
+        margin-bottom: 40px;
+      }
+
+      .footer-column h3 {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+        font-weight: 600;
+      }
+
+      .footer-column p {
+        color: var(--text-light);
+        margin-bottom: 20px;
+      }
+
+      .social-icons {
+        display: flex;
+        gap: 15px;
+      }
+
+      .social-icons a {
+        color: var(--text-light);
+        transition: color 0.3s;
+      }
+
+      .social-icons a:hover {
+        color: var(--primary);
+      }
+
+      .footer-links {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .footer-links a {
+        color: var(--text-light);
+        transition: color 0.3s;
+      }
+
+      .footer-links a:hover {
+        color: var(--primary);
+      }
+
+      .footer-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 30px;
+        border-top: 1px solid var(--border);
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+
+      .copyright {
+        color: var(--text-light);
+        font-size: 0.9rem;
+      }
+
+      .footer-legal {
+        display: flex;
+        gap: 20px;
+      }
+
+      .footer-legal a {
+        color: var(--text-light);
+        font-size: 0.9rem;
+        transition: color 0.3s;
+      }
+
+      .footer-legal a:hover {
+        color: var(--primary);
+      }
+
+      /* Mobile Menu */
+      .mobile-menu {
+        display: none;
+        background-color: white;
+        padding: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .mobile-menu a {
+        display: block;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .mobile-menu a:last-child {
+        border-bottom: none;
+      }
+
+      .mobile-dropdown {
+        padding-left: 20px;
+        display: none;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .nav-links,
+        .nav-icons {
+          display: none;
+        }
+
+        .mobile-menu-btn {
+          display: block;
+        }
+
+        .mobile-menu.active {
+          display: block;
+        }
+
+        .artikel-layout {
+          flex-direction: column;
+        }
+
+        .artikel-sidebar {
+          max-width: 100%;
+          order: 1;
+        }
+
+        .artikel-main {
+          order: 2;
+        }
+
+        .footer-bottom {
+          flex-direction: column;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <div class="container">
+        <div class="navbar">
+          <a href="index.html" class="logo">
+            <div class="logo-icon">B</div>
+            Booku
+          </a>
+          <nav class="nav-links">
+            <a href="index.html">Beranda</a>
+            <div class="dropdown">
+              <a href="#">Halaman</a>
+              <div class="dropdown-content">
+                <a href="about.html">Tentang Kami</a>
+                <a href="contact.html">Kontak</a>
+              </div>
+            </div>
+            <a href="katalog.html">Katalog</a>
+            <a href="artikel.html" class="active">Artikel</a>
+          </nav>
+          <div class="nav-icons">
+            <button class="icon-btn">
+              <i class="fas fa-user"></i>
+            </button>
+            <button class="icon-btn">
+              <i class="fas fa-shopping-cart"></i>
+              <span class="cart-count">0</span>
+            </button>
+          </div>
+          <button class="mobile-menu-btn">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+      </div>
+      <div class="mobile-menu">
+        <a href="index.html">Beranda</a>
+        <a href="#" class="mobile-dropdown-toggle">Halaman</a>
+        <div class="mobile-dropdown">
+          <a href="about.html">Tentang Kami</a>
+          <a href="contact.html">Kontak</a>
+        </div>
+        <a href="katalog.html">Katalog</a>
+        <a href="artikel.html">Artikel</a>
+        <a href="#"><i class="fas fa-user"></i> Akun</a>
+        <a href="#"><i class="fas fa-shopping-cart"></i> Keranjang (0)</a>
+      </div>
+    </header>
+
+    <!-- Artikel Header -->
+    <div class="artikel-header">
+      <div class="container">
+        <h1 class="artikel-title">Artikel</h1>
+        <p>Temukan informasi menarik seputar dunia literasi dan buku terbaru</p>
+      </div>
+    </div>
+
+    <!-- Artikel Content -->
+    <div class="container">
+      <div class="artikel-layout">
+        <!-- Main Artikel Content -->
+        <div class="artikel-main">
+          <div class="artikel-grid">
+            <div class="artikel-card">
+              <div class="artikel-card-image">
+                <img
+                  src="https://via.placeholder.com/600x400"
+                  alt="10 Buku Wajib Baca 2023"
+                />
+              </div>
+              <div class="artikel-card-content">
+                <div class="artikel-meta">
+                  <span>Daftar Buku</span>
+                  <span>15 Mei 2023</span>
+                </div>
+                <h3 class="artikel-card-title">
+                  10 Buku Wajib Baca untuk Tahun 2023
+                </h3>
+                <p class="artikel-excerpt">
+                  Temukan buku-buku terbaik yang sedang populer tahun ini dan
+                  mengapa Anda harus menambahkannya ke daftar bacaan Anda.
+                </p>
+                <div class="artikel-footer">
+                  <span class="artikel-author">Oleh: Adelia Marlee</span>
+                  <a href="#" class="read-more">Baca Selengkapnya</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="artikel-card">
+              <div class="artikel-card-image">
+                <img
+                  src="https://via.placeholder.com/600x400"
+                  alt="Manfaat Membaca untuk Kesehatan Mental"
+                />
+              </div>
+              <div class="artikel-card-content">
+                <div class="artikel-meta">
+                  <span>Kesehatan</span>
+                  <span>28 April 2023</span>
+                </div>
+                <h3 class="artikel-card-title">
+                  Bagaimana Membaca Meningkatkan Kesehatan Mental
+                </h3>
+                <p class="artikel-excerpt">
+                  Penelitian menunjukkan bahwa membaca secara teratur dapat
+                  meningkatkan kesehatan mental Anda secara signifikan. Pelajari
+                  bagaimana buku dapat menjadi terapi.
+                </p>
+                <div class="artikel-footer">
+                  <span class="artikel-author">Oleh: Cameron Williamson</span>
+                  <a href="#" class="read-more">Baca Selengkapnya</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="artikel-card">
+              <div class="artikel-card-image">
+                <img
+                  src="https://via.placeholder.com/600x400"
+                  alt="Wawancara dengan Penulis Bestseller Jane Cooper"
+                />
+              </div>
+              <div class="artikel-card-content">
+                <div class="artikel-meta">
+                  <span>Wawancara</span>
+                  <span>10 April 2023</span>
+                </div>
+                <h3 class="artikel-card-title">
+                  Wawancara dengan Penulis Bestseller Jane Cooper
+                </h3>
+                <p class="artikel-excerpt">
+                  Kami berbincang dengan penulis peraih penghargaan Jane Cooper
+                  untuk membahas proses penulisannya dan proyek-proyek
+                  mendatang.
+                </p>
+                <div class="artikel-footer">
+                  <span class="artikel-author">Oleh: Theodore Mello</span>
+                  <a href="#" class="read-more">Baca Selengkapnya</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="artikel-card">
+              <div class="artikel-card-image">
+                <img
+                  src="https://via.placeholder.com/600x400"
+                  alt="Kebangkitan E-book"
+                />
+              </div>
+              <div class="artikel-card-content">
+                <div class="artikel-meta">
+                  <span>Tren Industri</span>
+                  <span>22 Maret 2023</span>
+                </div>
+                <h3 class="artikel-card-title">
+                  Kebangkitan E-book: Apakah Buku Fisik Menjadi Usang?
+                </h3>
+                <p class="artikel-excerpt">
+                  Seiring dengan semakin populernya membaca digital, kami
+                  mengkaji masa depan buku cetak tradisional dan bagaimana
+                  keduanya dapat berdampingan.
+                </p>
+                <div class="artikel-footer">
+                  <span class="artikel-author">Oleh: Kathryn Murphy</span>
+                  <a href="#" class="read-more">Baca Selengkapnya</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="artikel-card">
+              <div class="artikel-card-image">
+                <img
+                  src="https://via.placeholder.com/600x400"
+                  alt="Membuat Sudut Baca yang Nyaman"
+                />
+              </div>
+              <div class="artikel-card-content">
+                <div class="artikel-meta">
+                  <span>Gaya Hidup</span>
+                  <span>5 Maret 2023</span>
+                </div>
+                <h3 class="artikel-card-title">
+                  Cara Membuat Sudut Baca yang Nyaman di Rumah
+                </h3>
+                <p class="artikel-excerpt">
+                  Ubah sudut mana pun di rumah Anda menjadi tempat membaca yang
+                  nyaman dengan tips dan ide sederhana ini.
+                </p>
+                <div class="artikel-footer">
+                  <span class="artikel-author">Oleh: Jasmine Bell</span>
+                  <a href="#" class="read-more">Baca Selengkapnya</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="artikel-card">
+              <div class="artikel-card-image">
+                <img
+                  src="https://via.placeholder.com/600x400"
+                  alt="Buku Anak yang Disukai Orang Dewasa"
+                />
+              </div>
+              <div class="artikel-card-content">
+                <div class="artikel-meta">
+                  <span>Daftar Buku</span>
+                  <span>18 Februari 2023</span>
+                </div>
+                <h3 class="artikel-card-title">
+                  Buku Anak-anak yang Juga Disukai Orang Dewasa
+                </h3>
+                <p class="artikel-excerpt">
+                  Buku anak-anak klasik ini menawarkan kebijaksanaan dan
+                  kesenangan bagi pembaca dari segala usia.
+                </p>
+                <div class="artikel-footer">
+                  <span class="artikel-author">Oleh: Annie McCoy</span>
+                  <a href="#" class="read-more">Baca Selengkapnya</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pagination">
+            <div class="pagination-item active">1</div>
+            <div class="pagination-item">2</div>
+            <div class="pagination-item">3</div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="artikel-sidebar">
+          <div class="sidebar-card">
+            <h2 class="sidebar-title">Pencarian</h2>
+            <div class="search-box">
+              <input
+                type="text"
+                class="search-input"
+                placeholder="Cari artikel..."
+              />
+              <button class="search-btn">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="sidebar-card">
+            <h2 class="sidebar-title">Kategori</h2>
+            <div class="category-list">
+              <a href="#">Daftar Buku</a>
+              <a href="#">Kesehatan</a>
+              <a href="#">Wawancara</a>
+              <a href="#">Tren Industri</a>
+              <a href="#">Gaya Hidup</a>
+              <a href="#">Ulasan</a>
+              <a href="#">Tips Menulis</a>
+            </div>
+          </div>
+
+          <div class="sidebar-card">
+            <h2 class="sidebar-title">Berlangganan</h2>
+            <p>Dapatkan artikel terbaru langsung ke kotak masuk Anda.</p>
+            <form class="subscribe-form">
+              <input type="email" placeholder="Email Anda" />
+              <button class="btn" style="width: 100%">Berlangganan</button>
+            </form>
+          </div>
+
+          <div class="sidebar-card" style="background-color: var(--secondary)">
+            <h2 class="sidebar-title">Artikel Populer</h2>
+            <div class="popular-posts">
+              <div
+                style="
+                  margin-bottom: 15px;
+                  padding-bottom: 15px;
+                  border-bottom: 1px solid var(--border);
+                "
+              >
+                <a href="#" style="font-weight: 500"
+                  >Bagaimana Memulai Kebiasaan Membaca Harian</a
+                >
+                <p
+                  style="
+                    font-size: 0.8rem;
+                    color: var(--text-light);
+                    margin-top: 5px;
+                  "
+                >
+                  12 Januari 2023
+                </p>
+              </div>
+              <div
+                style="
+                  margin-bottom: 15px;
+                  padding-bottom: 15px;
+                  border-bottom: 1px solid var(--border);
+                "
+              >
+                <a href="#" style="font-weight: 500"
+                  >5 Penulis Indonesia yang Wajib Anda Kenal</a
+                >
+                <p
+                  style="
+                    font-size: 0.8rem;
+                    color: var(--text-light);
+                    margin-top: 5px;
+                  "
+                >
+                  5 Februari 2023
+                </p>
+              </div>
+              <div>
+                <a href="#" style="font-weight: 500"
+                  >Tren Buku Terbaru di Tahun 2023</a
+                >
+                <p
+                  style="
+                    font-size: 0.8rem;
+                    color: var(--text-light);
+                    margin-top: 5px;
+                  "
+                >
+                  20 Maret 2023
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-column">
+            <h3>Tentang Kami</h3>
+            <p>
+              Booku adalah aplikasi beli buku praktis berbasis website
+              interaktif yang dapat digunakan di segala device.
+            </p>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+          <div class="footer-column">
+            <h3>Bantuan</h3>
+            <div class="footer-links">
+              <a href="#">FAQ</a>
+              <a href="#">Pengiriman</a>
+              <a href="#">Pengembalian</a>
+              <a href="#">Status Pesanan</a>
+              <a href="#">Opsi Pembayaran</a>
+            </div>
+          </div>
+          <div class="footer-column">
+            <h3>Pembayaran Aman</h3>
+            <div class="footer-links">
+              <a href="#">Kartu Kredit / Debit</a>
+              <a href="#">PayPal</a>
+              <a href="#">Cryptocurrency</a>
+              <a href="#">Transfer Bank</a>
+              <a href="#">E-Wallet</a>
+            </div>
+          </div>
+          <div class="footer-column">
+            <h3>Jejaring Sosial</h3>
+            <div class="footer-links">
+              <a href="#"><i class="fab fa-facebook-f"></i> Facebook</a>
+              <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+              <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+              <a href="#"><i class="fab fa-youtube"></i> Youtube</a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p class="copyright">
+            &copy; 2023 Booku Digital Library. Hak Cipta Dilindungi.
+          </p>
+          <div class="footer-legal">
+            <a href="#">Syarat & Ketentuan</a>
+            <a href="#">Kebijakan Privasi</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Mobile Menu Toggle
+      document.addEventListener("DOMContentLoaded", function () {
+        const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
+        const mobileMenu = document.querySelector(".mobile-menu");
+        const mobileDropdownToggle = document.querySelector(
+          ".mobile-dropdown-toggle"
+        );
+        const mobileDropdown = document.querySelector(".mobile-dropdown");
+
+        mobileMenuBtn.addEventListener("click", function () {
+          mobileMenu.classList.toggle("active");
+          const icon = mobileMenuBtn.querySelector("i");
+          if (icon.classList.contains("fa-bars")) {
+            icon.classList.remove("fa-bars");
+            icon.classList.add("fa-times");
+          } else {
+            icon.classList.remove("fa-times");
+            icon.classList.add("fa-bars");
+          }
+        });
+
+        mobileDropdownToggle.addEventListener("click", function (e) {
+          e.preventDefault();
+          mobileDropdown.style.display =
+            mobileDropdown.style.display === "block" ? "none" : "block";
+        });
+      });
+    </script>
+  </body>
+</html>

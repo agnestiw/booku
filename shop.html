@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Toko - Booku</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      /* Reset dan Dasar */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+          sans-serif;
+      }
+
+      /* Warna */
+      :root {
+        --primary: #10b981;
+        --primary-dark: #059669;
+        --secondary: #f5f3ef;
+        --text: #333;
+        --text-light: #666;
+        --border: #eee;
+      }
+
+      body {
+        background-color: #fff;
+        color: var(--text);
+        line-height: 1.6;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      ul {
+        list-style: none;
+      }
+
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      /* Tombol */
+      .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: background-color 0.3s;
+      }
+
+      .btn:hover {
+        background-color: var(--primary-dark);
+      }
+
+      .btn-outline {
+        background-color: transparent;
+        border: 1px solid var(--primary);
+        color: var(--primary);
+      }
+
+      .btn-outline:hover {
+        background-color: #f0fdf9;
+      }
+
+      /* Header dan Navigasi */
+      header {
+        background-color: white;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 70px;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        font-size: 1.5rem;
+      }
+
+      .logo-icon {
+        width: 32px;
+        height: 32px;
+        background-color: var(--primary);
+        color: white;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 8px;
+        font-weight: bold;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+      }
+
+      .nav-links a {
+        font-weight: 500;
+        position: relative;
+      }
+
+      .nav-links a:hover {
+        color: var(--primary);
+      }
+
+      .nav-links a.active {
+        color: var(--primary);
+      }
+
+      .dropdown {
+        position: relative;
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: white;
+        min-width: 160px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+        border-radius: 4px;
+        padding: 8px 0;
+      }
+
+      .dropdown-content a {
+        padding: 8px 16px;
+        display: block;
+      }
+
+      .dropdown-content a:hover {
+        background-color: var(--secondary);
+      }
+
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+
+      .nav-icons {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .icon-btn {
+        position: relative;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.2rem;
+      }
+
+      .cart-count {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background-color: var(--primary);
+        color: white;
+        font-size: 0.7rem;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .mobile-menu-btn {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+
+      /* Shop Page Styles */
+      .shop-header {
+        padding: 40px 0 20px;
+        background-color: var(--secondary);
+      }
+
+      .shop-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+      }
+
+      .shop-layout {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        margin-bottom: 40px;
+      }
+
+      .shop-sidebar {
+        flex: 1;
+        min-width: 250px;
+        max-width: 300px;
+      }
+
+      .shop-main {
+        flex: 3;
+        min-width: 300px;
+      }
+
+      .filter-card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        border: 1px solid var(--border);
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      .filter-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .filter-section {
+        margin-bottom: 20px;
+      }
+
+      .filter-section h3 {
+        font-size: 1rem;
+        margin-bottom: 10px;
+      }
+
+      .checkbox-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .checkbox-item {
+        display: flex;
+        align-items: center;
+      }
+
+      .checkbox-item input {
+        margin-right: 8px;
+      }
+
+      .price-inputs {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+      .price-input {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+
+      .shop-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        background-color: var(--secondary);
+        padding: 15px;
+        border-radius: 8px;
+      }
+
+      .result-count {
+        color: var(--text-light);
+      }
+
+      .search-shop {
+        display: flex;
+        max-width: 300px;
+      }
+
+      .search-shop input {
+        flex: 1;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-right: none;
+        border-radius: 4px 0 0 4px;
+      }
+
+      .search-shop button {
+        padding: 8px 12px;
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 0 4px 4px 0;
+      }
+
+      .book-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 20px;
+      }
+
+      .book-card {
+        background-color: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        border: 1px solid var(--border);
+        transition: transform 0.3s;
+      }
+
+      .book-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .book-card-image {
+        position: relative;
+        height: 250px;
+        overflow: hidden;
+      }
+
+      .book-card-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s;
+      }
+
+      .book-card:hover .book-card-image img {
+        transform: scale(1.05);
+      }
+
+      .discount-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: var(--primary);
+        color: white;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: bold;
+      }
+
+      .book-card-content {
+        padding: 15px;
+      }
+
+      .book-card-title {
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+        transition: color 0.3s;
+      }
+
+      .book-card:hover .book-card-title {
+        color: var(--primary);
+      }
+
+      .book-card-author {
+        color: var(--text-light);
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+      }
+
+      .book-card-price {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .price {
+        font-weight: bold;
+        font-size: 1.1rem;
+      }
+
+      .original-price {
+        color: #999;
+        text-decoration: line-through;
+        font-size: 0.9rem;
+        margin-left: 5px;
+      }
+
+      .cart-icon {
+        color: var(--primary);
+        cursor: pointer;
+      }
+
+      .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 40px;
+      }
+
+      .pagination-item {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #ddd;
+        margin: 0 5px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .pagination-item:hover,
+      .pagination-item.active {
+        background-color: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+
+      /* Footer */
+      footer {
+        background-color: white;
+        border-top: 1px solid var(--border);
+        padding: 60px 0 30px;
+        margin-top: 60px;
+      }
+
+      .footer-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 40px;
+        margin-bottom: 40px;
+      }
+
+      .footer-column h3 {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+        font-weight: 600;
+      }
+
+      .footer-column p {
+        color: var(--text-light);
+        margin-bottom: 20px;
+      }
+
+      .social-icons {
+        display: flex;
+        gap: 15px;
+      }
+
+      .social-icons a {
+        color: var(--text-light);
+        transition: color 0.3s;
+      }
+
+      .social-icons a:hover {
+        color: var(--primary);
+      }
+
+      .footer-links {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .footer-links a {
+        color: var(--text-light);
+        transition: color 0.3s;
+      }
+
+      .footer-links a:hover {
+        color: var(--primary);
+      }
+
+      .footer-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 30px;
+        border-top: 1px solid var(--border);
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+
+      .copyright {
+        color: var(--text-light);
+        font-size: 0.9rem;
+      }
+
+      .footer-legal {
+        display: flex;
+        gap: 20px;
+      }
+
+      .footer-legal a {
+        color: var(--text-light);
+        font-size: 0.9rem;
+        transition: color 0.3s;
+      }
+
+      .footer-legal a:hover {
+        color: var(--primary);
+      }
+
+      /* Mobile Menu */
+      .mobile-menu {
+        display: none;
+        background-color: white;
+        padding: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .mobile-menu a {
+        display: block;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .mobile-menu a:last-child {
+        border-bottom: none;
+      }
+
+      .mobile-dropdown {
+        padding-left: 20px;
+        display: none;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .nav-links,
+        .nav-icons {
+          display: none;
+        }
+
+        .mobile-menu-btn {
+          display: block;
+        }
+
+        .mobile-menu.active {
+          display: block;
+        }
+
+        .shop-sidebar {
+          max-width: 100%;
+        }
+
+        .shop-layout {
+          flex-direction: column;
+        }
+
+        .shop-toolbar {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 15px;
+        }
+
+        .search-shop {
+          width: 100%;
+          max-width: none;
+        }
+
+        .footer-bottom {
+          flex-direction: column;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <div class="container">
+        <div class="navbar">
+          <a href="index.html" class="logo">
+            <div class="logo-icon">B</div>
+            Booku
+          </a>
+          <nav class="nav-links">
+            <a href="index.html">Beranda</a>
+            <div class="dropdown">
+              <a href="#">Halaman</a>
+              <div class="dropdown-content">
+                <a href="about.html">Tentang Kami</a>
+                <a href="contact.html">Kontak</a>
+              </div>
+            </div>
+            <a href="shop.html" class="active">Toko</a>
+            <a href="artikel.html">Artikel</a>
+          </nav>
+          <div class="nav-icons">
+            <button class="icon-btn">
+              <i class="fas fa-user"></i>
+            </button>
+            <button class="icon-btn">
+              <i class="fas fa-shopping-cart"></i>
+              <span class="cart-count">0</span>
+            </button>
+          </div>
+          <button class="mobile-menu-btn">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+      </div>
+      <div class="mobile-menu">
+        <a href="index.html">Beranda</a>
+        <a href="#" class="mobile-dropdown-toggle">Halaman</a>
+        <div class="mobile-dropdown">
+          <a href="about.html">Tentang Kami</a>
+          <a href="contact.html">Kontak</a>
+        </div>
+        <a href="shop.html">Toko</a>
+        <a href="artikel.html">Artikel</a>
+        <a href="#"><i class="fas fa-user"></i> Akun</a>
+        <a href="#"><i class="fas fa-shopping-cart"></i> Keranjang (0)</a>
+      </div>
+    </header>
+
+    <!-- Shop Content -->
+    <div class="container">
+      <div class="shop-header">
+        <h1 class="shop-title">Toko</h1>
+      </div>
+
+      <div class="shop-layout">
+        <!-- Sidebar with Filters -->
+        <div class="shop-sidebar">
+          <div class="filter-card">
+            <h2 class="filter-title">Filter</h2>
+
+            <div class="filter-section">
+              <h3>Kategori</h3>
+              <div class="checkbox-group">
+                <label class="checkbox-item">
+                  <input type="checkbox" /> Fiksi
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" /> Non-Fiksi
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" /> Fiksi Ilmiah
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" /> Misteri
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" /> Romansa
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" /> Biografi
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" /> Sejarah
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" /> Pengembangan Diri
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" /> Buku Anak
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" /> Buku Teks
+                </label>
+              </div>
+            </div>
+
+            <div class="filter-section">
+              <h3>Rentang Harga</h3>
+              <div class="price-inputs">
+                <input type="number" placeholder="Min" class="price-input" />
+                <span>-</span>
+                <input type="number" placeholder="Max" class="price-input" />
+              </div>
+              <button class="btn" style="width: 100%">
+                <i class="fas fa-filter"></i> Terapkan Filter
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Shop Content -->
+        <div class="shop-main">
+          <div class="shop-toolbar">
+            <p class="result-count">Menampilkan 8 hasil</p>
+            <div class="search-shop">
+              <input type="text" placeholder="Cari buku..." />
+              <button>
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="book-grid">
+            <div class="book-card">
+              <div class="book-card-image">
+                <img
+                  src="https://via.placeholder.com/300x400"
+                  alt="Rowery Made"
+                />
+                <div class="discount-badge">27% Off</div>
+              </div>
+              <div class="book-card-content">
+                <h3 class="book-card-title">Rowery Made</h3>
+                <p class="book-card-author">Freya Mello</p>
+                <div class="book-card-price">
+                  <div>
+                    <span class="price">Rp 275.000</span>
+                    <span class="original-price">Rp 375.000</span>
+                  </div>
+                  <i class="fas fa-shopping-cart cart-icon"></i>
+                </div>
+              </div>
+            </div>
+            <div class="book-card">
+              <div class="book-card-image">
+                <img
+                  src="https://via.placeholder.com/300x400"
+                  alt="Roarer Type 1"
+                />
+                <div class="discount-badge">24% Off</div>
+              </div>
+              <div class="book-card-content">
+                <h3 class="book-card-title">Roarer Type 1</h3>
+                <p class="book-card-author">Annie McCoy</p>
+                <div class="book-card-price">
+                  <div>
+                    <span class="price">Rp 230.000</span>
+                    <span class="original-price">Rp 300.000</span>
+                  </div>
+                  <i class="fas fa-shopping-cart cart-icon"></i>
+                </div>
+              </div>
+            </div>
+            <div class="book-card">
+              <div class="book-card-image">
+                <img
+                  src="https://via.placeholder.com/300x400"
+                  alt="Roper Blue 1"
+                />
+                <div class="discount-badge">25% Off</div>
+              </div>
+              <div class="book-card-content">
+                <h3 class="book-card-title">Roper Blue 1</h3>
+                <p class="book-card-author">Theodore Mello</p>
+                <div class="book-card-price">
+                  <div>
+                    <span class="price">Rp 215.000</span>
+                    <span class="original-price">Rp 285.000</span>
+                  </div>
+                  <i class="fas fa-shopping-cart cart-icon"></i>
+                </div>
+              </div>
+            </div>
+            <div class="book-card">
+              <div class="book-card-image">
+                <img
+                  src="https://via.placeholder.com/300x400"
+                  alt="Roove Cyan 1"
+                />
+                <div class="discount-badge">22% Off</div>
+              </div>
+              <div class="book-card-content">
+                <h3 class="book-card-title">Roove Cyan 1</h3>
+                <p class="book-card-author">Kathryn Murphy</p>
+                <div class="book-card-price">
+                  <div>
+                    <span class="price">Rp 260.000</span>
+                    <span class="original-price">Rp 330.000</span>
+                  </div>
+                  <i class="fas fa-shopping-cart cart-icon"></i>
+                </div>
+              </div>
+            </div>
+            <div class="book-card">
+              <div class="book-card-image">
+                <img
+                  src="https://via.placeholder.com/300x400"
+                  alt="Gone Dead"
+                />
+                <div class="discount-badge">23% Off</div>
+              </div>
+              <div class="book-card-content">
+                <h3 class="book-card-title">Gone Dead</h3>
+                <p class="book-card-author">Theodore Mello</p>
+                <div class="book-card-price">
+                  <div>
+                    <span class="price">Rp 245.000</span>
+                    <span class="original-price">Rp 315.000</span>
+                  </div>
+                  <i class="fas fa-shopping-cart cart-icon"></i>
+                </div>
+              </div>
+            </div>
+            <div class="book-card">
+              <div class="book-card-image">
+                <img
+                  src="https://via.placeholder.com/300x400"
+                  alt="Life History"
+                />
+                <div class="discount-badge">23% Off</div>
+              </div>
+              <div class="book-card-content">
+                <h3 class="book-card-title">Life History</h3>
+                <p class="book-card-author">Annie McCoy</p>
+                <div class="book-card-price">
+                  <div>
+                    <span class="price">Rp 290.000</span>
+                    <span class="original-price">Rp 375.000</span>
+                  </div>
+                  <i class="fas fa-shopping-cart cart-icon"></i>
+                </div>
+              </div>
+            </div>
+            <div class="book-card">
+              <div class="book-card-image">
+                <img
+                  src="https://via.placeholder.com/300x400"
+                  alt="Find Kids"
+                />
+                <div class="discount-badge">25% Off</div>
+              </div>
+              <div class="book-card-content">
+                <h3 class="book-card-title">Find Kids</h3>
+                <p class="book-card-author">Kathryn Murphy</p>
+                <div class="book-card-price">
+                  <div>
+                    <span class="price">Rp 215.000</span>
+                    <span class="original-price">Rp 285.000</span>
+                  </div>
+                  <i class="fas fa-shopping-cart cart-icon"></i>
+                </div>
+              </div>
+            </div>
+            <div class="book-card">
+              <div class="book-card-image">
+                <img
+                  src="https://via.placeholder.com/300x400"
+                  alt="Ohio Quaker"
+                />
+                <div class="discount-badge">22% Off</div>
+              </div>
+              <div class="book-card-content">
+                <h3 class="book-card-title">Ohio Quaker</h3>
+                <p class="book-card-author">Jasmine Bell</p>
+                <div class="book-card-price">
+                  <div>
+                    <span class="price">Rp 260.000</span>
+                    <span class="original-price">Rp 330.000</span>
+                  </div>
+                  <i class="fas fa-shopping-cart cart-icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pagination">
+            <div class="pagination-item active">1</div>
+            <div class="pagination-item">2</div>
+            <div class="pagination-item">3</div>
+            <div class="pagination-item">...</div>
+            <div class="pagination-item">10</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-column">
+            <h3>Tentang Kami</h3>
+            <p>
+              Booku adalah aplikasi beli buku praktis berbasis website
+              interaktif yang dapat digunakan di segala device.
+            </p>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+          <div class="footer-column">
+            <h3>Bantuan</h3>
+            <div class="footer-links">
+              <a href="#">FAQ</a>
+              <a href="#">Pengiriman</a>
+              <a href="#">Pengembalian</a>
+              <a href="#">Status Pesanan</a>
+              <a href="#">Opsi Pembayaran</a>
+            </div>
+          </div>
+          <div class="footer-column">
+            <h3>Pembayaran Aman</h3>
+            <div class="footer-links">
+              <a href="#">Kartu Kredit / Debit</a>
+              <a href="#">PayPal</a>
+              <a href="#">Cryptocurrency</a>
+              <a href="#">Transfer Bank</a>
+              <a href="#">E-Wallet</a>
+            </div>
+          </div>
+          <div class="footer-column">
+            <h3>Jejaring Sosial</h3>
+            <div class="footer-links">
+              <a href="#"><i class="fab fa-facebook-f"></i> Facebook</a>
+              <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+              <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+              <a href="#"><i class="fab fa-youtube"></i> Youtube</a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p class="copyright">
+            &copy; 2023 Booku Digital Library. Hak Cipta Dilindungi.
+          </p>
+          <div class="footer-legal">
+            <a href="#">Syarat & Ketentuan</a>
+            <a href="#">Kebijakan Privasi</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Mobile Menu Toggle
+      document.addEventListener("DOMContentLoaded", function () {
+        const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
+        const mobileMenu = document.querySelector(".mobile-menu");
+        const mobileDropdownToggle = document.querySelector(
+          ".mobile-dropdown-toggle"
+        );
+        const mobileDropdown = document.querySelector(".mobile-dropdown");
+
+        mobileMenuBtn.addEventListener("click", function () {
+          mobileMenu.classList.toggle("active");
+          const icon = mobileMenuBtn.querySelector("i");
+          if (icon.classList.contains("fa-bars")) {
+            icon.classList.remove("fa-bars");
+            icon.classList.add("fa-times");
+          } else {
+            icon.classList.remove("fa-times");
+            icon.classList.add("fa-bars");
+          }
+        });
+
+        mobileDropdownToggle.addEventListener("click", function (e) {
+          e.preventDefault();
+          mobileDropdown.style.display =
+            mobileDropdown.style.display === "block" ? "none" : "block";
+        });
+      });
+    </script>
+  </body>
+</html>
