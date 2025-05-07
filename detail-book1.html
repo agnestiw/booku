@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Detail Buku - Booku</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    /* Reset dan Dasar */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    /* Warna */
+    :root {
+        --primary: #10b981;
+        --primary-dark: #059669;
+        --secondary: #F5F3EF;
+        --text: #333;
+        --text-light: #666;
+        --border: #eee;
+    }
+
+    body {
+        background-color: #fff;
+        color: var(--text);
+        line-height: 1.6;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    ul {
+        list-style: none;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    /* Tombol */
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+        background-color: var(--primary-dark);
+    }
+
+    .btn-outline {
+        background-color: transparent;
+        border: 1px solid var(--primary);
+        color: var(--primary);
+    }
+
+    .btn-outline:hover {
+        background-color: #f0fdf9;
+    }
+
+    .btn-block {
+        display: block;
+        width: 100%;
+    }
+
+    /* Header dan Navigasi */
+    header {
+        background-color: white;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 70px;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        font-size: 1.5rem;
+    }
+
+    .logo-icon {
+        width: 32px;
+        height: 32px;
+        background-color: var(--primary);
+        color: white;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 8px;
+        font-weight: bold;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 2rem;
+    }
+
+    .nav-links a {
+        font-weight: 500;
+        position: relative;
+    }
+
+    .nav-links a:hover {
+        color: var(--primary);
+    }
+
+    .nav-links a.active {
+        color: var(--primary);
+    }
+
+    .dropdown {
+        position: relative;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: white;
+        min-width: 160px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+        border-radius: 4px;
+        padding: 8px 0;
+    }
+
+    .dropdown-content a {
+        padding: 8px 16px;
+        display: block;
+    }
+
+    .dropdown-content a:hover {
+        background-color: var(--secondary);
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .nav-icons {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .icon-btn {
+        position: relative;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.2rem;
+    }
+
+    .cart-count {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background-color: var(--primary);
+        color: white;
+        font-size: 0.7rem;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mobile-menu-btn {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+
+    /* Book Detail Styles */
+    .book-detail-header {
+        background-color: var(--secondary);
+        padding: 40px 0;
+    }
+
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        font-size: 0.9rem;
+        color: var(--text-light);
+    }
+
+    .breadcrumb a {
+        color: var(--text-light);
+    }
+
+    .breadcrumb a:hover {
+        color: var(--primary);
+    }
+
+    .breadcrumb-separator {
+        margin: 0 8px;
+    }
+
+    .book-detail-content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 40px;
+        margin-bottom: 60px;
+    }
+
+    .book-image {
+        flex: 1;
+        min-width: 300px;
+        max-width: 400px;
+    }
+
+    .book-image img {
+        width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .book-info {
+        flex: 2;
+        min-width: 300px;
+    }
+
+    .book-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .book-author {
+        color: var(--text-light);
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+    }
+
+    .book-price {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .current-price {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary);
+    }
+
+    .original-price {
+        font-size: 1.2rem;
+        text-decoration: line-through;
+        color: var(--text-light);
+        margin-left: 15px;
+    }
+
+    .discount-badge {
+        background-color: var(--primary);
+        color: white;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin-left: 15px;
+    }
+
+    .book-description {
+        margin-bottom: 30px;
+        color: var(--text-light);
+    }
+
+    .book-meta {
+        margin-bottom: 30px;
+    }
+
+    .meta-item {
+        display: flex;
+        margin-bottom: 10px;
+    }
+
+    .meta-label {
+        width: 120px;
+        font-weight: 500;
+    }
+
+    .meta-value {
+        color: var(--text-light);
+    }
+
+    .quantity-selector {
+        display: flex;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .quantity-label {
+        margin-right: 15px;
+        font-weight: 500;
+    }
+
+    .quantity-controls {
+        display: flex;
+        align-items: center;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .quantity-btn {
+        width: 40px;
+        height: 40px;
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .quantity-btn:hover {
+        background-color: #f5f5f5;
+    }
+
+    .quantity-input {
+        width: 60px;
+        height: 40px;
+        border: none;
+        border-left: 1px solid #ddd;
+        border-right: 1px solid #ddd;
+        text-align: center;
+        font-size: 1rem;
+    }
+
+    .quantity-input:focus {
+        outline: none;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .wishlist-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        background: none;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .wishlist-btn:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+    }
+
+    .book-tabs {
+        margin-top: 60px;
+    }
+
+    .tabs-header {
+        display: flex;
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 30px;
+    }
+
+    .tab-btn {
+        padding: 15px 25px;
+        background: none;
+        border: none;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .tab-btn.active {
+        color: var(--primary);
+    }
+
+    .tab-btn.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: var(--primary);
+    }
+
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    .reviews {
+        margin-top: 30px;
+    }
+
+    .review-item {
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+
+    .review-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    .reviewer-name {
+        font-weight: 500;
+    }
+
+    .review-date {
+        color: var(--text-light);
+        font-size: 0.9rem;
+    }
+
+    .stars {
+        color: #fbbf24;
+        margin-bottom: 10px;
+    }
+
+    .review-text {
+        color: var(--text-light);
+    }
+
+    .related-books {
+        margin-top: 60px;
+    }
+
+    .related-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .book-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 30px;
+    }
+
+    .book-card {
+        background-color: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        border: 1px solid var(--border);
+        transition: transform 0.3s;
+    }
+
+    .book-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .book-card-image {
+        position: relative;
+        height: 250px;
+        overflow: hidden;
+    }
+
+    .book-card-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s;
+    }
+
+    .book-card:hover .book-card-image img {
+        transform: scale(1.05);
+    }
+
+    .discount-badge-small {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: var(--primary);
+        color: white;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+
+    .book-card-content {
+        padding: 15px;
+    }
+
+    .book-card-title {
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+        transition: color 0.3s;
+    }
+
+    .book-card:hover .book-card-title {
+        color: var(--primary);
+    }
+
+    .book-card-author {
+        color: var(--text-light);
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+    }
+
+    .book-card-price {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .price {
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+
+    .original-price-small {
+        color: #999;
+        text-decoration: line-through;
+        font-size: 0.9rem;
+        margin-left: 5px;
+    }
+
+    .cart-icon {
+        color: var(--primary);
+        cursor: pointer;
+    }
+
+    /* Footer */
+    footer {
+        background-color: white;
+        border-top: 1px solid var(--border);
+        padding: 60px 0 30px;
+        margin-top: 60px;
+    }
+
+    .footer-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 40px;
+        margin-bottom: 40px;
+    }
+
+    .footer-column h3 {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    .footer-column p {
+        color: var(--text-light);
+        margin-bottom: 20px;
+    }
+
+    .social-icons {
+        display: flex;
+        gap: 15px;
+    }
+
+    .social-icons a {
+        color: var(--text-light);
+        transition: color 0.3s;
+    }
+
+    .social-icons a:hover {
+        color: var(--primary);
+    }
+
+    .footer-links {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .footer-links a {
+        color: var(--text-light);
+        transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+        color: var(--primary);
+    }
+
+    .footer-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 30px;
+        border-top: 1px solid var(--border);
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .copyright {
+        color: var(--text-light);
+        font-size: 0.9rem;
+    }
+
+    .footer-legal {
+        display: flex;
+        gap: 20px;
+    }
+
+    .footer-legal a {
+        color: var(--text-light);
+        font-size: 0.9rem;
+        transition: color 0.3s;
+    }
+
+    .footer-legal a:hover {
+        color: var(--primary);
+    }
+
+    /* Mobile Menu */
+    .mobile-menu {
+        display: none;
+        background-color: white;
+        padding: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .mobile-menu a {
+        display: block;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .mobile-menu a:last-child {
+        border-bottom: none;
+    }
+
+    .mobile-dropdown {
+        padding-left: 20px;
+        display: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .nav-links, .nav-icons {
+            display: none;
+        }
+
+        .mobile-menu-btn {
+            display: block;
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .book-detail-content {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .book-image {
+            max-width: 100%;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+        }
+
+        .tabs-header {
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .tab-btn {
+            padding: 15px 15px;
+        }
+
+        .footer-bottom {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+</style>
+</head>
+<body>
+<!-- Header -->
+<header>
+    <div class="container">
+        <div class="navbar">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">B</div>
+                Booku
+            </a>
+            <nav class="nav-links">
+                <a href="index.html">Beranda</a>
+                <div class="dropdown">
+                    <a href="#">Halaman</a>
+                    <div class="dropdown-content">
+                        <a href="about.html">Tentang Kami</a>
+                        <a href="contact.html">Kontak</a>
+                    </div>
+                </div>
+                <a href="shop.html" class="active">Toko</a>
+                <a href="artikel.html">Artikel</a>
+            </nav>
+            <div class="nav-icons">
+                <a href="login.html" class="icon-btn">
+                    <i class="fas fa-user"></i>
+                </a>
+                <button class="icon-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </button>
+            </div>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </div>
+    <div class="mobile-menu">
+        <a href="index.html">Beranda</a>
+        <a href="#" class="mobile-dropdown-toggle">Halaman</a>
+        <div class="mobile-dropdown">
+            <a href="about.html">Tentang Kami</a>
+            <a href="contact.html">Kontak</a>
+        </div>
+        <a href="shop.html">Toko</a>
+        <a href="artikel.html">Artikel</a>
+        <a href="login.html"><i class="fas fa-user"></i> Masuk</a>
+        <a href="#"><i class="fas fa-shopping-cart"></i> Keranjang (0)</a>
+    </div>
+</header>
+
+<!-- Book Detail Content -->
+<div class="book-detail-header">
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">Beranda</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="shop.html">Toko</a>
+            <span class="breadcrumb-separator">/</span>
+            <span>Gone Dead</span>
+        </div>
+        <div class="book-detail-content">
+            <div class="book-image">
+                <img src="https://via.placeholder.com/400x600" alt="Gone Dead">
+            </div>
+            <div class="book-info">
+                <h1 class="book-title">Gone Dead</h1>
+                <p class="book-author">Oleh Theodore Mello</p>
+                <div class="book-price">
+                    <span class="current-price">Rp 245.000</span>
+                    <span class="original-price">Rp 315.000</span>
+                    <span class="discount-badge">23% Off</span>
+                </div>
+                <div class="book-description">
+                    <p>Gone Dead adalah novel thriller psikologis yang memikat tentang seorang wanita yang kembali ke rumah masa kecilnya di Mississippi Delta untuk menyelidiki kematian ayahnya yang belum terselesaikan. Saat dia menggali masa lalu, dia menemukan rahasia gelap yang telah tersembunyi selama bertahun-tahun.</p>
+                    <p>Buku ini menggabungkan misteri yang menegangkan dengan eksplorasi mendalam tentang ras, keluarga, dan warisan di Selatan Amerika. Dengan prosa yang indah dan karakter yang kompleks, Gone Dead adalah bacaan yang tak terlupakan yang akan membuat Anda terpaku hingga halaman terakhir.</p>
+                </div>
+                <div class="book-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">ISBN:</span>
+                        <span class="meta-value">9781234567890</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Penerbit:</span>
+                        <span class="meta-value">Gramedia Pustaka Utama</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Tahun Terbit:</span>
+                        <span class="meta-value">2022</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Halaman:</span>
+                        <span class="meta-value">320</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Bahasa:</span>
+                        <span class="meta-value">Indonesia</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Kategori:</span>
+                        <span class="meta-value">Fiksi, Thriller, Misteri</span>
+                    </div>
+                </div>
+                <div class="quantity-selector">
+                    <span class="quantity-label">Jumlah:</span>
+                    <div class="quantity-controls">
+                        <button class="quantity-btn">-</button>
+                        <input type="number" class="quantity-input" value="1" min="1">
+                        <button class="quantity-btn">+</button>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <a href="#" class="btn btn-block">Tambahkan ke Keranjang</a>
+                    <button class="wishlist-btn">
+                        <i class="far fa-heart"></i>
+                        Tambahkan ke Wishlist
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Book Tabs -->
+<div class="container">
+    <div class="book-tabs">
+        <div class="tabs-header">
+            <button class="tab-btn active" data-tab="description">Deskripsi</button>
+            <button class="tab-btn" data-tab="details">Detail Buku</button>
+            <button class="tab-btn" data-tab="reviews">Ulasan (3)</button>
+        </div>
+        <div class="tab-content active" id="description">
+            <h2>Sinopsis</h2>
+            <p>Dalam novel thriller psikologis yang memikat ini, Billie James kembali ke rumah masa kecilnya di Mississippi Delta setelah kematian ayahnya yang misterius. Ayahnya, seorang penulis terkenal, ditemukan tewas di dekat rumah mereka ketika Billie masih kecil, dan kematiannya tidak pernah benar-benar terselesaikan.</p>
+            <p>Saat Billie mulai menggali masa lalu, dia menemukan bahwa banyak orang di kota kecil itu masih mengingat ayahnya dan kematiannya yang tragis. Namun, semakin dalam dia menyelidiki, semakin banyak pertanyaan yang muncul. Mengapa ada kesenjangan dalam laporan polisi? Mengapa beberapa penduduk kota tampak enggan berbicara tentang malam itu? Dan mengapa Billie sendiri tidak memiliki ingatan tentang peristiwa tersebut?</p>
+            <p>Dalam pencariannya akan kebenaran, Billie harus menghadapi warisan rumit dari ras dan kekerasan di Selatan, serta rahasia keluarganya sendiri yang telah terkubur selama bertahun-tahun. Gone Dead adalah kisah yang kuat tentang sejarah, identitas, dan harga yang harus dibayar untuk mengungkap kebenaran.</p>
+        </div>
+        <div class="tab-content" id="details">
+            <h2>Informasi Detail</h2>
+            <div class="book-meta">
+                <div class="meta-item">
+                    <span class="meta-label">Judul:</span>
+                    <span class="meta-value">Gone Dead</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Penulis:</span>
+                    <span class="meta-value">Theodore Mello</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">ISBN:</span>
+                    <span class="meta-value">9781234567890</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Penerbit:</span>
+                    <span class="meta-value">Gramedia Pustaka Utama</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Tahun Terbit:</span>
+                    <span class="meta-value">2022</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Halaman:</span>
+                    <span class="meta-value">320</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Bahasa:</span>
+                    <span class="meta-value">Indonesia</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Kategori:</span>
+                    <span class="meta-value">Fiksi, Thriller, Misteri</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Dimensi:</span>
+                    <span class="meta-value">15 x 23 cm</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Berat:</span>
+                    <span class="meta-value">450 gram</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Cover:</span>
+                    <span class="meta-value">Soft Cover</span>
+                </div>
+            </div>
+        </div>
+        <div class="tab-content" id="reviews">
+            <h2>Ulasan Pelanggan</h2>
+            <div class="reviews">
+                <div class="review-item">
+                    <div class="review-header">
+                        <span class="reviewer-name">Adelia Marlee</span>
+                        <span class="review-date">15 Mei 2023</span>
+                    </div>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="review-text">Buku ini luar biasa! Saya tidak bisa berhenti membacanya. Alur ceritanya menarik dan karakternya sangat berkembang. Sangat direkomendasikan untuk penggemar thriller psikologis.</p>
+                </div>
+                <div class="review-item">
+                    <div class="review-header">
+                        <span class="reviewer-name">Cameron Williamson</span>
+                        <span class="review-date">28 April 2023</span>
+                    </div>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="review-text">Saya sangat menikmati buku ini. Penulisnya berhasil menciptakan suasana yang menegangkan dan membuat saya terus penasaran hingga akhir. Pengiriman cepat dan buku dalam kondisi sempurna.</p>
+                </div>
+                <div class="review-item">
+                    <div class="review-header">
+                        <span class="reviewer-name">Jane Cooper</span>
+                        <span class="review-date">10 April 2023</span>
+                    </div>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                    <p class="review-text">Ceritanya bagus dan menarik, tapi saya merasa endingnya sedikit terburu-buru. Meskipun demikian, saya tetap merekomendasikan buku ini untuk penggemar genre thriller.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Books -->
+    <div class="related-books">
+        <h2 class="related-title">Buku Terkait</h2>
+        <div class="book-grid">
+            <div class="book-card">
+                <div class="book-card-image">
+                    <img src="https://via.placeholder.com/300x400" alt="Life History">
+                    <div class="discount-badge-small">23% Off</div>
+                </div>
+                <div class="book-card-content">
+                    <h3 class="book-card-title">Life History</h3>
+                    <p class="book-card-author">Annie McCoy</p>
+                    <div class="book-card-price">
+                        <div>
+                            <span class="price">Rp 290.000</span>
+                            <span class="original-price-small">Rp 375.000</span>
+                        </div>
+                        <i class="fas fa-shopping-cart cart-icon"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="book-card">
+                <div class="book-card-image">
+                    <img src="https://via.placeholder.com/300x400" alt="Find Kids">
+                    <div class="discount-badge-small">25% Off</div>
+                </div>
+                <div class="book-card-content">
+                    <h3 class="book-card-title">Find Kids</h3>
+                    <p class="book-card-author">Kathryn Murphy</p>
+                    <div class="book-card-price">
+                        <div>
+                            <span class="price">Rp 215.000</span>
+                            <span class="original-price-small">Rp 285.000</span>
+                        </div>
+                        <i class="fas fa-shopping-cart cart-icon"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="book-card">
+                <div class="book-card-image">
+                    <img src="https://via.placeholder.com/300x400" alt="Ohio Quaker">
+                    <div class="discount-badge-small">22% Off</div>
+                </div>
+                <div class="book-card-content">
+                    <h3 class="book-card-title">Ohio Quaker</h3>
+                    <p class="book-card-author">Jasmine Bell</p>
+                    <div class="book-card-price">
+                        <div>
+                            <span class="price">Rp 260.000</span>
+                            <span class="original-price-small">Rp 330.000</span>
+                        </div>
+                        <i class="fas fa-shopping-cart cart-icon"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="book-card">
+                <div class="book-card-image">
+                    <img src="https://via.placeholder.com/300x400" alt="Roarer Type 1">
+                    <div class="discount-badge-small">24% Off</div>
+                </div>
+                <div class="book-card-content">
+                    <h3 class="book-card-title">Roarer Type 1</h3>
+                    <p class="book-card-author">Annie McCoy</p>
+                    <div class="book-card-price">
+                        <div>
+                            <span class="price">Rp 230.000</span>
+                            <span class="original-price-small">Rp 300.000</span>
+                        </div>
+                        <i class="fas fa-shopping-cart cart-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-column">
+                <h3>Tentang Kami</h3>
+                <p>Booku adalah aplikasi beli buku praktis berbasis website interaktif yang dapat digunakan di segala device.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3>Bantuan</h3>
+                <div class="footer-links">
+                    <a href="#">FAQ</a>
+                    <a href="#">Pengiriman</a>
+                    <a href="#">Pengembalian</a>
+                    <a href="#">Status Pesanan</a>
+                    <a href="#">Opsi Pembayaran</a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3>Pembayaran Aman</h3>
+                <div class="footer-links">
+                    <a href="#">Kartu Kredit / Debit</a>
+                    <a href="#">PayPal</a>
+                    <a href="#">Cryptocurrency</a>
+                    <a href="#">Transfer Bank</a>
+                    <a href="#">E-Wallet</a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3>Jejaring Sosial</h3>
+                <div class="footer-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i> Facebook</a>
+                    <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+                    <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+                    <a href="#"><i class="fab fa-youtube"></i> Youtube</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p class="copyright">&copy; 2023 Booku Digital Library. Hak Cipta Dilindungi.</p>
+            <div class="footer-legal">
+                <a href="#">Syarat & Ketentuan</a>
+                <a href="#">Kebijakan Privasi</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Mobile Menu Toggle
+    document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const mobileDropdownToggle = document.querySelector('.mobile-dropdown-toggle');
+        const mobileDropdown = document.querySelector('.mobile-dropdown');
+
+        mobileMenuBtn.addEventListener('click', function() {
+            mobileMenu.classList.toggle('active');
+            const icon = mobileMenuBtn.querySelector('i');
+            if (icon.classList.contains('fa-bars')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        mobileDropdownToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            mobileDropdown.style.display = mobileDropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Quantity Selector
+        const minusBtn = document.querySelector('.quantity-btn:first-child');
+        const plusBtn = document.querySelector('.quantity-btn:last-child');
+        const quantityInput = document.querySelector('.quantity-input');
+
+        minusBtn.addEventListener('click', function() {
+            let value = parseInt(quantityInput.value);
+            if (value > 1) {
+                quantityInput.value = value - 1;
+            }
+        });
+
+        plusBtn.addEventListener('click', function() {
+            let value = parseInt(quantityInput.value);
+            quantityInput.value = value + 1;
+        });
+
+        // Tabs
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                tabBtns.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                this.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Wishlist Button
+        const wishlistBtn = document.querySelector('.wishlist-btn');
+        wishlistBtn.addEventListener('click', function() {
+            const icon = this.querySelector('i');
+            if (icon.classList.contains('far')) {
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+                this.style.color = '#ef4444';
+                this.style.borderColor = '#ef4444';
+            } else {
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+                this.style.color = '';
+                this.style.borderColor = '';
+            }
+        });
+    });
+</script>
+</body>
+</html>
